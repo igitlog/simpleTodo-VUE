@@ -20,7 +20,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import TodoItem from './components/TodoItem.vue'
-import { Todo } from './types'
+import { Todo } from './types.ts'
 
 export default defineComponent({
   components: {
