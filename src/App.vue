@@ -1,30 +1,52 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div id="app">
+    <h1>Список задач</h1>
+    <input 
+      v-model="newTodo" 
+      @keyup.enter="addTodo" 
+      placeholder="Добавить новую задачу"
+    >
+    <ul>
+      <TodoItem
+        v-for="(todo, index) in todos"
+        :key="index"
+        :todo="todo"
+        @remove="removeTodo(index)"
+      />
+    </ul>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
+import TodoItem from './components/TodoItem.vue'
+import { Todo } from './types'
+
+export default defineComponent({
+  components: {
+    TodoItem
+  },
+  setup() {
+    const newTodo = ref<string>('')
+    const todos = ref<Todo[]>([])
+
+    const addTodo = (): void => {
+      if (newTodo.value.trim()) {
+        todos.value.push({ text: newTodo.value.trim() })
+        newTodo.value = ''
+      }
+    }
+
+    const removeTodo = (index: number): void => {
+      todos.value.splice(index, 1)
+    }
+
+    return {
+      newTodo,
+      todos,
+      addTodo,
+      removeTodo
+    }
+  }
+})
+</script>
